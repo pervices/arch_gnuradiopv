@@ -35,6 +35,7 @@ install=gnuradio.install
 # split the gui components?
 # build doxygen docs?
 # icons
+# gnuradio-osmosdr is not an optdep
 
 # comedilib: gr-comedi
 # zeroc-ice: gr-ctrlport
