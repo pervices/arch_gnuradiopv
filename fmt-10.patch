@@ -1,0 +1,26 @@
+diff --git a/gnuradio-runtime/lib/controlport/thrift/rpcpmtconverters_thrift.cc b/gnuradio-runtime/lib/controlport/thrift/rpcpmtconverters_thrift.cc
+index b2b021ff3..d8c2468d9 100644
+--- a/gnuradio-runtime/lib/controlport/thrift/rpcpmtconverters_thrift.cc
++++ b/gnuradio-runtime/lib/controlport/thrift/rpcpmtconverters_thrift.cc
+@@ -255,7 +255,7 @@ pmt::pmt_t rpcpmtconverter::to_pmt_f::operator()(const GNURadio::Knob& knob)
+     // FIXME: Don't get loggers every time we need to log something.
+     gr::logger_ptr logger, debug_logger;
+     gr::configure_default_loggers(logger, debug_logger, "rpcpmtconverter");
+-    debug_logger->error("ERROR Don't know how to handle Knob Type (from): {}", knob.type);
++    debug_logger->error("ERROR Don't know how to handle Knob Type (from): {}", static_cast<int>(knob.type));
+     assert(0);
+     return pmt::pmt_t();
+ }
+diff --git a/gr-uhd/lib/rfnoc_rx_streamer_impl.cc b/gr-uhd/lib/rfnoc_rx_streamer_impl.cc
+index d71edfce7..12106660c 100644
+--- a/gr-uhd/lib/rfnoc_rx_streamer_impl.cc
++++ b/gr-uhd/lib/rfnoc_rx_streamer_impl.cc
+@@ -143,7 +143,7 @@ int rfnoc_rx_streamer_impl::work(int noutput_items,
+     default:
+         d_logger->warn("RFNoC Streamer block received error {:s} (Code: {})",
+                        d_metadata.strerror(),
+-                       d_metadata.error_code);
++                       static_cast<int>(d_metadata.error_code));
+     }
+ 
+     if (d_metadata.end_of_burst) {
