@@ -11,16 +11,3 @@ index b2b021ff3..d8c2468d9 100644
      assert(0);
      return pmt::pmt_t();
  }
-diff --git a/gr-uhd/lib/rfnoc_rx_streamer_impl.cc b/gr-uhd/lib/rfnoc_rx_streamer_impl.cc
-index d71edfce7..12106660c 100644
---- a/gr-uhd/lib/rfnoc_rx_streamer_impl.cc
-+++ b/gr-uhd/lib/rfnoc_rx_streamer_impl.cc
-@@ -143,7 +143,7 @@ int rfnoc_rx_streamer_impl::work(int noutput_items,
-     default:
-         d_logger->warn("RFNoC Streamer block received error {:s} (Code: {})",
-                        d_metadata.strerror(),
--                       d_metadata.error_code);
-+                       static_cast<int>(d_metadata.error_code));
-     }
- 
-     if (d_metadata.end_of_burst) {
