@@ -7,7 +7,7 @@
 pkgbase=gnuradio
 pkgname=(gnuradio gnuradio-companion)
 pkgver=3.10.9.2
-pkgrel=2
+pkgrel=3
 pkgdesc="General purpose DSP and SDR toolkit with drivers for usrp and fcd."
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -70,6 +70,7 @@ source=(
   $pkgbase-$pkgver.tar.gz::https://github.com/$pkgbase/$pkgbase/archive/v$pkgver/$pkgbase-v$pkgver.tar.gz
   https://github.com/gnuradio/gnuradio/releases/download/v$pkgver/$pkgbase-$pkgver.tar.gz.asc
   https://github.com/gnuradio/gnuradio/commit/7c87800f.patch
+  https://github.com/gnuradio/gnuradio/commit/21df5288.patch
   21-fcd.rules
 )
 validpgpkeys=(
@@ -80,14 +81,17 @@ validpgpkeys=(
 sha512sums=('5eca8dd21def7354ab8bd3b98a5780f80bc71b0dd8f556a50def157964e121c7ba6a8a8dc96584f6b15a6b2d7e0391fe77f5c72ba31c1c5b49a76306dd6f78cd'
             'SKIP'
             '8aa900e9d7ec456018e73290a1ebbdcb00333862a6c0dc23f8c43db015a0c6dc23a027c52bf67203cb7486b1fb181817875fc0747602c28f5ab418af5607f741'
+            'aa9a676c004f07c0dd3efe4a858ba07ce94d760724fdaae90f5b7744e0a711d2f890d5d3d5dce1a2061a6ede5af33240150d9121094fa8d3fc125c1470c9f54c'
             '6f02dc8e20a7a1cd11099c851a7c8427fcd21e9652e6cddd0a72ca747b0e93cd4fd1b7b7b7e426b6231348bcc34fb2417716a2f03c92ec141889edc65031c3a0')
 b2sums=('69443e9b6893c6cb9db1678c28ac0fd01fe57e81438903612f7f65908fede257dab06a98fa90da25fe8caa6befb731ba51759509ace10a5541cae3e9d055a5db'
         'SKIP'
         '93744fad89c09c3bf2e3e7b031f475abd1d6cd20eff8ef84655b8b08283f532227b68384b969f267baf16a640e52a6d18b27e01adc6f9fc9647dfbdd92f5b689'
+        '9105873ffffc11b0ad1e2097d4277fe7289b35e81a61afa4f2a99c058810de2154c3647c925b0d553411cee5f7b0f47dd96b300963eb5adbc7a312ac5b556fe2'
         '83657a141a7a4fc52ae62e19b480fd7b7e651efffc2186d3eb96e8612beffbbe71b434a2323ae37c74465ff6a959a4ca1f9c9db5ed02ab641f1784e704ab5f4d')
 
 prepare() {
- patch -d $pkgbase-$pkgver -Rp1 < 7c87800f.patch # Revert change that breaks intalling data
+ patch -d $pkgbase-$pkgver -Rp1 < 7c87800f.patch # Revert change that breaks installing data
+ patch -d $pkgbase-$pkgver -p1 < 21df5288.patch # Fix tests with python 3.12
 }
 
 build() {
