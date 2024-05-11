@@ -1,7 +1,7 @@
 pkgbase = gnuradio
 	pkgdesc = General purpose DSP and SDR toolkit with drivers for usrp and fcd.
 	pkgver = 3.10.10.0
-	pkgrel = 1
+	pkgrel = 2
 	url = https://gnuradio.org
 	arch = x86_64
 	license = GPL3
