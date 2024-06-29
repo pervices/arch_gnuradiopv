@@ -7,7 +7,7 @@
 pkgbase=gnuradio
 pkgname=(gnuradio gnuradio-companion)
 pkgver=3.10.10.0
-pkgrel=4
+pkgrel=5
 pkgdesc="General purpose DSP and SDR toolkit with drivers for usrp and fcd."
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -92,6 +92,7 @@ b2sums=('820fe32e19d137726cc06aa9bc8fd92fe28fb5c0f398cacb5fe01eac247b31044738d84
 prepare() {
  patch -d $pkgbase-$pkgver -Rp1 < 7c87800f.patch # Revert change that breaks installing data
  patch -d $pkgbase-$pkgver -p1 < numpy-2.0.patch # Fix test with numpy 2.0
+ sed -e 's|6.3|6.4|g' -i $pkgbase-$pkgver/cmake/Modules/FindQwt.cmake
 }
 
 build() {
