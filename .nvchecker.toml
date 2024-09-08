@@ -1,0 +1,5 @@
+[gnuradio]
+source = "git"
+git = "https://github.com/gnuradio/gnuradio/"
+prefix = "v"
+include_regex = 'v\d+\.\d+\.\d+.\d+'
