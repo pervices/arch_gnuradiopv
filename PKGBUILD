@@ -7,7 +7,7 @@
 pkgbase=gnuradio
 pkgname=(gnuradio gnuradio-companion)
 pkgver=3.10.10.0
-pkgrel=6
+pkgrel=7
 pkgdesc="General purpose DSP and SDR toolkit with drivers for usrp and fcd."
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -67,11 +67,12 @@ checkdepends=(
   xorg-server-xvfb
 )
 source=(
-  $pkgbase-$pkgver.tar.gz::https://github.com/$pkgbase/$pkgbase/archive/v$pkgver/$pkgbase-v$pkgver.tar.gz
-  https://github.com/gnuradio/gnuradio/releases/download/v$pkgver/$pkgbase-$pkgver.tar.gz.asc
-  https://github.com/gnuradio/gnuradio/commit/7c87800f.patch
-  numpy-2.0.patch
-  21-fcd.rules
+  "$pkgbase-$pkgver.tar.gz::https://github.com/$pkgbase/$pkgbase/archive/v$pkgver/$pkgbase-v$pkgver.tar.gz"
+  "https://github.com/gnuradio/gnuradio/releases/download/v$pkgver/$pkgbase-$pkgver.tar.gz.asc"
+  "https://github.com/gnuradio/gnuradio/commit/7c87800f.patch"
+  "numpy-2.0.patch"
+  "21-fcd.rules"
+  "fmt-v11.patch::https://github.com/gnuradio/gnuradio/commit/19b070051c1c2b5fb6f2da8fb6422b27418c3dfa.patch"
 )
 validpgpkeys=(
   'B90DDFAC56989BF62262EB812987C77CBB8ED9B2'  # GNU Radio Project (Admin) <admin@gnuradio.org>
@@ -80,19 +81,22 @@ validpgpkeys=(
 )
 sha512sums=('31943dcad7a65c5c27f945192381af251a7253303c94c5e1d688ce3dc4d1f0bab99fb9e00db3f14cd50fe55cf65e363f4b161286511b32cd81c240dcd7b43feb'
             'SKIP'
-            '90229a91eda5a3bf2bd11b40c1311af27ab659eeed85c8a77fa15abc5a3928bdea23b77803981a51deeecab670ee52e68b7ff5ffb3c026d93eec641819af5157'
+            '8aa900e9d7ec456018e73290a1ebbdcb00333862a6c0dc23f8c43db015a0c6dc23a027c52bf67203cb7486b1fb181817875fc0747602c28f5ab418af5607f741'
             'cd738252b93a3df7fa0826b0a9b237c774a9bcfeb4c0f1dc06f6e776e3011d821d4cce84849dcdfdf1dd238654b596127b0f300ba0b495a529c7304c58dae7a2'
-            '6f02dc8e20a7a1cd11099c851a7c8427fcd21e9652e6cddd0a72ca747b0e93cd4fd1b7b7b7e426b6231348bcc34fb2417716a2f03c92ec141889edc65031c3a0')
+            '6f02dc8e20a7a1cd11099c851a7c8427fcd21e9652e6cddd0a72ca747b0e93cd4fd1b7b7b7e426b6231348bcc34fb2417716a2f03c92ec141889edc65031c3a0'
+            '4d9355d22c63bcf42dbbf4de796ca8c724721c5f77034648aeeca0209bb93a10d457c789679a3a86e1cd9e629153c7602fee0a260635abf96e13e1d1e373095a')
 b2sums=('820fe32e19d137726cc06aa9bc8fd92fe28fb5c0f398cacb5fe01eac247b31044738d84b6e640c0acf3c7903980c9a8b5fe92efee5926c4d1ecaaba8f6f46e04'
         'SKIP'
-        '68296637568d3d3fe7fb96c8dc5d4843279ffc4f9553956d31139f88030eb240e50e6678012bad48017cc428aa1c9dccf914ca9c66cba901015ab6fcb9db712d'
+        '93744fad89c09c3bf2e3e7b031f475abd1d6cd20eff8ef84655b8b08283f532227b68384b969f267baf16a640e52a6d18b27e01adc6f9fc9647dfbdd92f5b689'
         '40e6abaffdcc2b823bf138b0a7bf11cabe938583e36369cc30199b897688f51ba3edd6ba6d74f0b266f6dd5b722e18baf0cb83388957cdc11dd2184d8b80768d'
-        '83657a141a7a4fc52ae62e19b480fd7b7e651efffc2186d3eb96e8612beffbbe71b434a2323ae37c74465ff6a959a4ca1f9c9db5ed02ab641f1784e704ab5f4d')
+        '83657a141a7a4fc52ae62e19b480fd7b7e651efffc2186d3eb96e8612beffbbe71b434a2323ae37c74465ff6a959a4ca1f9c9db5ed02ab641f1784e704ab5f4d'
+        '7fbfffbacb511dc84f8f8993967e95cfa6e5951a4c9ab359b2fa5980ae713d17369d05a8f576a25c25994bee249bec1424a8c3a74bd970f670a28d747d2776eb')
 
 prepare() {
- patch -d $pkgbase-$pkgver -Rp1 < 7c87800f.patch # Revert change that breaks installing data
- patch -d $pkgbase-$pkgver -p1 < numpy-2.0.patch # Fix test with numpy 2.0
- sed -e 's|6.3|6.4|g' -i $pkgbase-$pkgver/cmake/Modules/FindQwt.cmake
+  patch -d $pkgbase-$pkgver -Rp1 < 7c87800f.patch # Revert change that breaks installing data
+  patch -d $pkgbase-$pkgver -p1 < numpy-2.0.patch # Fix test with numpy 2.0
+  patch -d $pkgbase-$pkgver -p1 < fmt-v11.patch   # Fix build with fmt 8.0
+  sed -e 's|6.3|6.4|g' -i $pkgbase-$pkgver/cmake/Modules/FindQwt.cmake
 }
 
 build() {
