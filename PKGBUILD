@@ -1,108 +1,104 @@
-# Maintainer: Kyle Keen <keenerd@gmail.com>
+# Maintainer: Carl Smedstad <carsme@archlinux.org>
+# Contributor: Kyle Keen <keenerd@gmail.com>
 # Contributor: David Runge <dvzrv@archlinux.org>
 # Contributor: Dominik Heidler <dheidler@gmail.com>
-# Contributor:	Jonatan Sastre <jsastreh [ at ] hotmail.com>
+# Contributor: Jonatan Sastre <jsastreh [ at ] hotmail.com>
 
-# NOTE: sonames change on each release, so *all* dependent packages have to be rebuilt!
 pkgbase=gnuradio
-pkgname=(gnuradio gnuradio-companion)
-pkgver=3.10.10.0
-pkgrel=8
-pkgdesc="General purpose DSP and SDR toolkit with drivers for usrp and fcd."
+pkgname=(
+  gnuradio
+  gnuradio-companion
+)
+pkgver=3.10.11.0
+pkgrel=1
+pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
-license=(GPL3)
+license=(GPL-3.0-or-later)
 depends=(
-  codec2  # host
+  codec2
   gcc-libs
   glibc
-  gmp  # host
-  gsl  # host
-  libad9361  # gnuradio.iio
-  libuhd  # gnuradio.uhd
+  gmp
+  gsl
+  libad9361
+  libuhd
   libunwind
-  libvolk  # host
-  python-click  # host
-  python-click-plugins  # host
-  python-mako  # host
+  libvolk
+  python-click
+  python-mako
   python-matplotlib
-  python-numpy  # host
-  # python-pygccxml  # gnuradio.modtool  # TODO: package
-  python-pyyaml  # various
-  python-pyzmq  # gnuradio.zeromq
+  python-numpy
+  python-pygccxml
+  python-pyyaml
+  python-pyzmq
   python-scipy
-  python-thrift  # runtime
-  sdl12-compat  # gnuradio.video_sdl
-  soapysdr  # gnuradio.soapy
-  spdlog  # host
-  thrift  # host
+  python-thrift
+  sdl12-compat
+  soapysdr
+  spdlog
+  thrift
 )
 makedepends=(
-  alsa-lib  # gnuradio.audio
+  alsa-lib
   boost
-  cppzmq  # gnuradio.zeromq
   cmake
-  fftw  # host
+  cppzmq
+  fftw
   fmt
   gtk3
-  jack  # gnuradio.audio
-  libiio  # gnuradio.iio
-  libsndfile  # host
-  portaudio  # gnuradio.audio
+  jack
+  libiio
+  libsndfile
+  portaudio
   pybind11
-  python-cairo  # gnuradio.companion
-  python-gobject  # gnuradio.companion
-  python-lxml  # gnuradio.companion
+  python-cairo
+  python-gobject
+  python-lxml
   python-packaging
-  python-pyqt5  # gnuradio.qtgui
-  python-pyqtgraph  # gnuradio.qtgui
-  python-pytest  # only required for tests
+  python-pyqt5
+  python-pyqtgraph
+  python-pytest
   qt5-base
-  qwt  # gnuradio.qtgui
-  zeromq  # gnuradio.zeromq
+  qwt
+  xdg-utils
+  zeromq
 )
 checkdepends=(
   python-jsonschema
-  python-setuptools  # gnuradio.modtool
+  python-pytest
+  python-setuptools
   xorg-server-xvfb
 )
+_url=https://github.com/gnuradio/gnuradio
 source=(
-  "$pkgbase-$pkgver.tar.gz::https://github.com/$pkgbase/$pkgbase/archive/v$pkgver/$pkgbase-v$pkgver.tar.gz"
-  "https://github.com/gnuradio/gnuradio/releases/download/v$pkgver/$pkgbase-$pkgver.tar.gz.asc"
-  "https://github.com/gnuradio/gnuradio/commit/7c87800f.patch"
-  "numpy-2.0.patch"
+  "$pkgbase-$pkgver.tar.gz::$_url/archive/v$pkgver/$pkgbase-v$pkgver.tar.gz"
+  "$_url/releases/download/v$pkgver/$pkgbase-$pkgver.tar.gz.asc"
+  "numpy-2.0.patch::$_url/commit/8fbc5eb4b7214a4cb029ccae97205a85d49bdd48.patch"
   "21-fcd.rules"
-  "fmt-v11.patch::https://github.com/gnuradio/gnuradio/commit/19b070051c1c2b5fb6f2da8fb6422b27418c3dfa.patch"
 )
-validpgpkeys=(
-  'B90DDFAC56989BF62262EB812987C77CBB8ED9B2'  # GNU Radio Project (Admin) <admin@gnuradio.org>
-  'D74F9F146E7F755783583158B343B2BA293E5174'  # Marcus Müller (GNU Radio Maintainer) <mmueller@gnuradio.org>
-  '723EC3A2B90533C6B93DFBC8ED797743F7951435'  # GNU Radio (Software Signing Key) <info@gnuradio.org>
-)
-sha512sums=('31943dcad7a65c5c27f945192381af251a7253303c94c5e1d688ce3dc4d1f0bab99fb9e00db3f14cd50fe55cf65e363f4b161286511b32cd81c240dcd7b43feb'
+sha256sums=('9ca658e6c4af9cfe144770757b34ab0edd23f6dcfaa6c5c46a7546233e5ecd29'
             'SKIP'
-            '8aa900e9d7ec456018e73290a1ebbdcb00333862a6c0dc23f8c43db015a0c6dc23a027c52bf67203cb7486b1fb181817875fc0747602c28f5ab418af5607f741'
-            'cd738252b93a3df7fa0826b0a9b237c774a9bcfeb4c0f1dc06f6e776e3011d821d4cce84849dcdfdf1dd238654b596127b0f300ba0b495a529c7304c58dae7a2'
-            '6f02dc8e20a7a1cd11099c851a7c8427fcd21e9652e6cddd0a72ca747b0e93cd4fd1b7b7b7e426b6231348bcc34fb2417716a2f03c92ec141889edc65031c3a0'
-            '4d9355d22c63bcf42dbbf4de796ca8c724721c5f77034648aeeca0209bb93a10d457c789679a3a86e1cd9e629153c7602fee0a260635abf96e13e1d1e373095a')
-b2sums=('820fe32e19d137726cc06aa9bc8fd92fe28fb5c0f398cacb5fe01eac247b31044738d84b6e640c0acf3c7903980c9a8b5fe92efee5926c4d1ecaaba8f6f46e04'
-        'SKIP'
-        '93744fad89c09c3bf2e3e7b031f475abd1d6cd20eff8ef84655b8b08283f532227b68384b969f267baf16a640e52a6d18b27e01adc6f9fc9647dfbdd92f5b689'
-        '40e6abaffdcc2b823bf138b0a7bf11cabe938583e36369cc30199b897688f51ba3edd6ba6d74f0b266f6dd5b722e18baf0cb83388957cdc11dd2184d8b80768d'
-        '83657a141a7a4fc52ae62e19b480fd7b7e651efffc2186d3eb96e8612beffbbe71b434a2323ae37c74465ff6a959a4ca1f9c9db5ed02ab641f1784e704ab5f4d'
-        '7fbfffbacb511dc84f8f8993967e95cfa6e5951a4c9ab359b2fa5980ae713d17369d05a8f576a25c25994bee249bec1424a8c3a74bd970f670a28d747d2776eb')
+            '27371395b1cb400bf5fa390bf0e2688107e576b9e1d3aec28a08bed8a087c8b9'
+            '928f4e4b5d8d9fab634e119b83ba9db9fb3501b4d5527cceb7bfa595818be81a')
+validpgpkeys=(
+  'B90DDFAC56989BF62262EB812987C77CBB8ED9B2' # GNU Radio Project (Admin) <admin@gnuradio.org>
+  'D74F9F146E7F755783583158B343B2BA293E5174' # Marcus Müller (GNU Radio Maintainer) <mmueller@gnuradio.org>
+  '723EC3A2B90533C6B93DFBC8ED797743F7951435' # GNU Radio (Software Signing Key) <info@gnuradio.org>
+)
 
 prepare() {
-  patch -d $pkgbase-$pkgver -Rp1 < 7c87800f.patch # Revert change that breaks installing data
-  patch -d $pkgbase-$pkgver -p1 < numpy-2.0.patch # Fix test with numpy 2.0
-  patch -d $pkgbase-$pkgver -p1 < fmt-v11.patch   # Fix build with fmt 8.0
-  sed -e 's|6.3|6.4|g' -i $pkgbase-$pkgver/cmake/Modules/FindQwt.cmake
+  cd $pkgbase-$pkgver
+  patch -Np1 -i "$srcdir/numpy-2.0.patch"
 }
 
 build() {
+  cd $pkgbase-$pkgver
   local cmake_options=(
+    -S . -B build
     -D CMAKE_INSTALL_PREFIX=/usr
     -D CMAKE_BUILD_TYPE=None
+    -W no-dev
     -D ENABLE_GR_ANALOG=ON
     -D ENABLE_GR_AUDIO=ON
     -D ENABLE_GR_BLOCKS=ON
@@ -128,34 +124,29 @@ build() {
     -D ENABLE_GR_WAVELET=ON
     -D ENABLE_GR_ZEROMQ=ON
     -D ENABLE_GRC=ON
-    -D ENABLE_POSTINSTALL=OFF  # we distribute freedesktop integration directly
-    -W no-dev
-    -B build
-    -S $pkgbase-$pkgver
-    -G 'Unix Makefiles'
+    -D ENABLE_POSTINSTALL=OFF
   )
-
   cmake "${cmake_options[@]}"
   cmake --build build
 }
 
 check() {
-  # NOTE: disable broken tests
-  xvfb-run ctest --test-dir build --output-on-failure -E 'pfb_synthesizer|filter_qa_fir_filter_with_buffer.cc'
+  cd $pkgbase-$pkgver
+  xvfb-run ctest --test-dir build --output-on-failure
 }
 
 package_gnuradio() {
   depends+=(
-    alsa-lib libasound.so
-    boost-libs libboost_{program_options,thread}.so
-    fftw libfftw3f.so libfftw3f_threads.so
-    fmt libfmt.so
-    jack libjack.so
-    libiio libiio.so
-    libsndfile libsndfile.so
-    portaudio libportaudio.so
-    spdlog libspdlog.so
-    zeromq libzmq.so
+    alsa-lib
+    boost-libs
+    fftw
+    fmt
+    jack
+    libiio
+    libsndfile
+    portaudio
+    spdlog
+    zeromq
   )
   optdepends=(
     'gnuradio-companion: for GUI frontend'
@@ -185,25 +176,30 @@ package_gnuradio() {
     libgnuradio-zeromq.so
   )
   backup=(
-    etc/$pkgbase/conf.d/00-grc-docs.conf
-    etc/$pkgbase/conf.d/gnuradio-runtime.conf
-    etc/$pkgbase/conf.d/gr-audio{,-{alsa,jack,oss,portaudio}}.conf
-    etc/$pkgbase/conf.d/gr-qtgui.conf
-    etc/$pkgbase/conf.d/gr_log_default.conf
-    etc/$pkgbase/conf.d/grc.conf
-    etc/$pkgbase/conf.d/modtool.conf
+    etc/gnuradio/conf.d/00-grc-docs.conf
+    etc/gnuradio/conf.d/gnuradio-runtime.conf
+    etc/gnuradio/conf.d/gr-audio{,-{alsa,jack,oss,portaudio}}.conf
+    etc/gnuradio/conf.d/gr-qtgui.conf
+    etc/gnuradio/conf.d/gr_log_default.conf
+    etc/gnuradio/conf.d/grc.conf
+    etc/gnuradio/conf.d/modtool.conf
   )
 
+  cd $pkgbase-$pkgver
   DESTDIR="$pkgdir" cmake --install build
-  install -vDm 644 21-fcd.rules -t "$pkgdir/usr/lib/udev/rules.d/"
-  # remove optimized bytecode files: https://github.com/gnuradio/gnuradio/issues/6463
-  find "$pkgdir" -type f -iname "*.pyo" -delete
-  # remove unneeded freedesktop integration tooling: https://github.com/gnuradio/gnuradio/issues/6464
-  rm -frv "$pkgdir/usr/libexec/"
+  install -vDm644 -t "$pkgdir/usr/lib/udev/rules.d/" "$srcdir/21-fcd.rules"
+
+  install -vDm644 -t "$pkgdir/usr/share/applications" grc/scripts/freedesktop/gnuradio-grc.desktop
+  install -vDm644 -t "$pkgdir/usr/share/mime/packages" grc/scripts/freedesktop/gnuradio-grc.xml
+  install -vDm644 -t "$pkgdir/usr/share/metainfo" grc/scripts/freedesktop/org.gnuradio.grc.metainfo.xml
+  for size in 16 24 32 48 64 128 256; do
+    install -vDm644 "grc/scripts/freedesktop/grc-icon-$size.png" \
+      "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/gnuradio-grc.png"
+  done
 }
 
 package_gnuradio-companion() {
-  pkgdesc="GUI frontend for gnuradio and SDR."
+  pkgdesc="GUI frontend for gnuradio and SDR"
   depends=(
     gnuradio
     python-cairo
@@ -215,5 +211,4 @@ package_gnuradio-companion() {
     qt5-base
     qwt
   )
-  # NOTE: we are only pulling in dependencies here
 }
