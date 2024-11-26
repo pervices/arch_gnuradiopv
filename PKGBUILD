@@ -10,7 +10,7 @@ pkgname=(
   gnuradio-companion
 )
 pkgver=3.10.11.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
