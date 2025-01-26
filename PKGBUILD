@@ -10,7 +10,7 @@ pkgname=(
   gnuradio-companion
 )
 pkgver=3.10.11.0
-pkgrel=5
+pkgrel=6
 pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -74,12 +74,14 @@ _url=https://github.com/gnuradio/gnuradio
 source=(
   "$pkgbase-$pkgver.tar.gz::$_url/archive/v$pkgver/$pkgbase-v$pkgver.tar.gz"
   "$_url/releases/download/v$pkgver/$pkgbase-$pkgver.tar.gz.asc"
-  "numpy-2.0.patch::$_url/commit/8fbc5eb4b7214a4cb029ccae97205a85d49bdd48.patch"
+  "$pkgname-numpy-2.0.patch::$_url/commit/8fbc5eb4b7214a4cb029ccae97205a85d49bdd48.patch"
+  "$pkgname-boost-1.87.patch::$_url/commit/111a4ff8b868791dae74d8cdf8c1e0684840f51a.patch"
   "21-fcd.rules"
 )
 sha256sums=('9ca658e6c4af9cfe144770757b34ab0edd23f6dcfaa6c5c46a7546233e5ecd29'
             'SKIP'
             '27371395b1cb400bf5fa390bf0e2688107e576b9e1d3aec28a08bed8a087c8b9'
+            '844d5157489fcd25467b98cbb48c4a52cc95eba41dc32a1c39c48fa75e21be19'
             '928f4e4b5d8d9fab634e119b83ba9db9fb3501b4d5527cceb7bfa595818be81a')
 validpgpkeys=(
   'B90DDFAC56989BF62262EB812987C77CBB8ED9B2' # GNU Radio Project (Admin) <admin@gnuradio.org>
@@ -89,7 +91,8 @@ validpgpkeys=(
 
 prepare() {
   cd $pkgbase-$pkgver
-  patch -Np1 -i "$srcdir/numpy-2.0.patch"
+  patch -Np1 -i ../gnuradio-numpy-2.0.patch
+  patch -Np1 -i ../gnuradio-boost-1.87.patch
 }
 
 build() {
