@@ -97,39 +97,12 @@ prepare() {
 
 build() {
   cd $pkgbase-$pkgver
-  local cmake_options=(
-    -S . -B build
-    -D CMAKE_INSTALL_PREFIX=/usr
-    -D CMAKE_BUILD_TYPE=None
-    -W no-dev
-    -D ENABLE_GR_ANALOG=ON
-    -D ENABLE_GR_AUDIO=ON
-    -D ENABLE_GR_BLOCKS=ON
-    -D ENABLE_GR_BLOCKTOOL=ON
-    -D ENABLE_GR_CHANNELS=ON
-    -D ENABLE_GR_CTRLPORT=ON
-    -D ENABLE_GR_DIGITAL=ON
-    -D ENABLE_GR_DTV=ON
-    -D ENABLE_GR_FEC=ON
-    -D ENABLE_GR_FFT=ON
-    -D ENABLE_GR_FILTER=ON
-    -D ENABLE_GR_IIO=ON
-    -D ENABLE_GR_MODTOOL=ON
-    -D ENABLE_GR_NETWORK=ON
-    -D ENABLE_GR_PDU=ON
-    -D ENABLE_GR_QTGUI=ON
-    -D ENABLE_GR_SOAPY=ON
-    -D ENABLE_GR_TRELLIS=ON
-    -D ENABLE_GR_UHD=ON
-    -D ENABLE_GR_UTILS=ON
-    -D ENABLE_GR_VIDEO_SDL=ON
-    -D ENABLE_GR_VOCODER=ON
-    -D ENABLE_GR_WAVELET=ON
-    -D ENABLE_GR_ZEROMQ=ON
-    -D ENABLE_GRC=ON
+  cmake \
+    -S . -B build \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_BUILD_TYPE=None \
+    -W no-dev \
     -D ENABLE_POSTINSTALL=OFF
-  )
-  cmake "${cmake_options[@]}"
   cmake --build build
 }
 
