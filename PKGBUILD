@@ -10,7 +10,7 @@ pkgname=(
   gnuradio-companion
 )
 pkgver=3.10.11.0
-pkgrel=7
+pkgrel=8
 pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -44,12 +44,14 @@ makedepends=(
   boost
   cmake
   cppzmq
+  doxygen
   fftw
   fmt
   gtk3
   jack
   libiio
   libsndfile
+  mathjax2
   portaudio
   pybind11
   python-cairo
