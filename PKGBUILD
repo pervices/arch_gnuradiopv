@@ -10,7 +10,7 @@ pkgname=(
   gnuradio-companion
 )
 pkgver=3.10.11.0
-pkgrel=8
+pkgrel=9
 pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -56,6 +56,7 @@ makedepends=(
   pybind11
   python-cairo
   python-gobject
+  python-jsonschema
   python-lxml
   python-packaging
   python-pyqt5
@@ -95,6 +96,9 @@ prepare() {
   cd $pkgbase-$pkgver
   patch -Np1 -i ../gnuradio-numpy-2.0.patch
   patch -Np1 -i ../gnuradio-boost-1.87.patch
+
+  # shellcheck disable=SC2016
+  sed -i 's/-${DOCVER}//' CMakeLists.txt
 }
 
 build() {
@@ -156,15 +160,19 @@ package_gnuradio() {
   backup=(
     etc/gnuradio/conf.d/00-grc-docs.conf
     etc/gnuradio/conf.d/gnuradio-runtime.conf
-    etc/gnuradio/conf.d/gr-audio{,-{alsa,jack,oss,portaudio}}.conf
+    etc/gnuradio/conf.d/gr-audio-alsa.conf
+    etc/gnuradio/conf.d/gr-audio-jack.conf
+    etc/gnuradio/conf.d/gr-audio-oss.conf
+    etc/gnuradio/conf.d/gr-audio-portaudio.conf
+    etc/gnuradio/conf.d/gr-audio.conf
     etc/gnuradio/conf.d/gr-qtgui.conf
-    etc/gnuradio/conf.d/gr_log_default.conf
     etc/gnuradio/conf.d/grc.conf
     etc/gnuradio/conf.d/modtool.conf
   )
 
   cd $pkgbase-$pkgver
   DESTDIR="$pkgdir" cmake --install build
+
   install -vDm644 -t "$pkgdir/usr/lib/udev/rules.d/" "$srcdir/21-fcd.rules"
 
   install -vDm644 -t "$pkgdir/usr/share/applications" grc/scripts/freedesktop/gnuradio-grc.desktop
