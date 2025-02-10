@@ -10,7 +10,7 @@ pkgname=(
   gnuradio-companion
 )
 pkgver=3.10.11.0
-pkgrel=9
+pkgrel=10
 pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -99,6 +99,10 @@ prepare() {
 
   # shellcheck disable=SC2016
   sed -i 's/-${DOCVER}//' CMakeLists.txt
+
+  # Strip build path from docs
+  sed -i 's/^STRIP_FROM_PATH.*/STRIP_FROM_PATH = @PROJECT_SOURCE_DIR@ @PROJECT_BINARY_DIR@/' \
+    docs/doxygen/Doxyfile.in
 }
 
 build() {
