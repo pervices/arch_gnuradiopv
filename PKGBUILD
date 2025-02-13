@@ -10,9 +10,11 @@ pkgname=(
   gnuradio-companion
   gnuradio-docs
   gnuradio-examples
+  gnuradio-utils
+  python-gnuradio
 )
 pkgver=3.10.11.0
-pkgrel=11
+pkgrel=12
 pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -149,17 +151,8 @@ package_gnuradio() {
     libvolk
     portaudio
     python
-    python-click
-    python-mako
     python-matplotlib
     python-numpy
-    python-pygccxml
-    python-pyqt5
-    python-pyqtgraph
-    python-pyyaml
-    python-pyzmq
-    python-scipy
-    python-thrift
     qt5-base
     qwt
     sdl12-compat
@@ -206,12 +199,11 @@ package_gnuradio() {
   cd $pkgbase-$pkgver
   DESTDIR="$pkgdir" cmake --install build
   install -vDm644 -t "$pkgdir/usr/share/doc/$pkgname" ./*.md
-  rm -r "$pkgdir/usr/share/gnuradio/modtool/templates/gr-newmod/docs"
 
   cd "$pkgdir"
-  local site_packages=$(python -c "import site; print(site.getsitepackages()[0][1:])")
+  local python_version=$(python -c "import sys; print(sys.version[:4])")
   _pick "$srcdir/gnuradio-companion" \
-    "$site_packages/gnuradio/grc" \
+    "usr/lib/python$python_version/site-packages/gnuradio/grc" \
     etc/gnuradio/conf.d/00-grc-docs.conf \
     etc/gnuradio/conf.d/grc.conf \
     usr/bin/gnuradio-companion \
@@ -221,18 +213,36 @@ package_gnuradio() {
     usr/share/man/man1/grcc.1
   _pick "$srcdir/gnuradio-docs" usr/share/doc
   _pick "$srcdir/gnuradio-examples" usr/share/gnuradio/examples
+  _pick "$srcdir/gnuradio-utils" \
+    usr/bin/gr-ctrlport-monitor \
+    usr/bin/gr-perf-monitorx \
+    usr/bin/gr_filter_design \
+    usr/bin/gr_modtool \
+    usr/bin/gr_plot \
+    usr/bin/gr_plot_fft \
+    usr/bin/gr_plot_psd \
+    usr/bin/gr_plot_qt \
+    usr/bin/gr_read_file_metadata \
+    usr/bin/polar_channel_construction \
+    usr/bin/uhd_fft \
+    usr/bin/uhd_rx_cfile \
+    usr/bin/uhd_rx_nogui \
+    usr/bin/uhd_siggen \
+    usr/bin/uhd_siggen_gui \
+    usr/share/gnuradio/modtool
+  _pick "$srcdir/python-gnuradio" "usr/lib/python$python_version"
 }
 
 package_gnuradio-companion() {
   pkgdesc+=" (GUI)"
   depends=(
     glib2
-    gnuradio
     gobject-introspection-runtime
     gtk3
     pango
     python
     python-cairo
+    python-gnuradio
     python-gobject
     python-lxml
     python-mako
@@ -277,11 +287,57 @@ package_gnuradio-examples() {
     gnuradio
     libuhd
     python
+    python-gnuradio
     python-matplotlib
     python-numpy
     python-pyqt5
     python-scipy
     qt5-base
+    spdlog
+  )
+
+  cp -va -t "$pkgdir" "$pkgname/"*
+}
+
+package_gnuradio-utils() {
+  pkgdesc+=" (utilities)"
+  depends=(
+    python
+    python-gnuradio
+    python-matplotlib
+    python-numpy
+    python-pyqt5
+    python-thrift
+  )
+
+  cp -va -t "$pkgdir" "$pkgname/"*
+}
+
+package_python-gnuradio() {
+  pkgdesc+=" (Python module)"
+  depends=(
+    fmt
+    gcc-libs
+    glibc
+    gmp
+    gnuradio
+    libuhd
+    libvolk
+    python
+    python-click
+    python-mako
+    python-matplotlib
+    python-numpy
+    python-pygccxml
+    python-pyqt5
+    python-pyqtgraph
+    python-pyzmq
+    python-scipy
+    python-setuptools
+    python-thrift
+    python-yaml
+    qt5-base
+    soapysdr
     spdlog
   )
 
