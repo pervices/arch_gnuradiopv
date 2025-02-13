@@ -8,67 +8,66 @@ pkgbase=gnuradio
 pkgname=(
   gnuradio
   gnuradio-companion
+  gnuradio-docs
+  gnuradio-examples
 )
 pkgver=3.10.11.0
-pkgrel=10
+pkgrel=11
 pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
 license=(GPL-3.0-or-later)
-depends=(
-  codec2
-  gcc-libs
-  glibc
-  gmp
-  gsl
-  libad9361
-  libuhd
-  libunwind
-  libvolk
-  python-click
-  python-mako
-  python-matplotlib
-  python-numpy
-  python-pygccxml
-  python-pyyaml
-  python-pyzmq
-  python-scipy
-  python-thrift
-  sdl12-compat
-  soapysdr
-  spdlog
-  thrift
-)
 makedepends=(
   alsa-lib
   boost
+  boost-libs
   cmake
+  codec2
   cppzmq
   doxygen
   fftw
   fmt
+  gcc-libs
+  glibc
+  gmp
+  gsl
   gtk3
   jack
+  libad9361
   libiio
   libsndfile
+  libuhd
+  libunwind
+  libvolk
   mathjax2
   portaudio
   pybind11
   python-cairo
+  python-click
   python-gobject
   python-jsonschema
   python-lxml
+  python-mako
+  python-matplotlib
+  python-numpy
   python-packaging
+  python-pygccxml
   python-pyqt5
   python-pyqtgraph
-  python-pytest
+  python-pyyaml
+  python-pyzmq
+  python-scipy
+  python-thrift
   qt5-base
   qwt
+  sdl12-compat
+  soapysdr
+  spdlog
+  thrift
   xdg-utils
   zeromq
 )
 checkdepends=(
-  python-jsonschema
   python-pytest
   python-setuptools
   xorg-server-xvfb
@@ -121,23 +120,55 @@ check() {
   xvfb-run ctest --test-dir build --output-on-failure
 }
 
+_pick() {
+  local dest="$1"
+  shift
+  for obj in "$@"; do
+    mkdir -p "$dest/$(dirname "$obj")/"
+    mv -v -t "$dest/$(dirname "$obj")/" "$obj"
+  done
+}
+
 package_gnuradio() {
-  depends+=(
+  depends=(
     alsa-lib
     boost-libs
+    codec2
     fftw
     fmt
+    gcc-libs
+    glibc
+    gmp
+    gsl
     jack
+    libad9361
     libiio
     libsndfile
+    libuhd
+    libunwind
+    libvolk
     portaudio
+    python
+    python-click
+    python-mako
+    python-matplotlib
+    python-numpy
+    python-pygccxml
+    python-pyqt5
+    python-pyqtgraph
+    python-pyyaml
+    python-pyzmq
+    python-scipy
+    python-thrift
+    qt5-base
+    qwt
+    sdl12-compat
+    soapysdr
     spdlog
+    thrift
     zeromq
   )
-  optdepends=(
-    'gnuradio-companion: for GUI frontend'
-    'python-setuptools: for gr_modtool'
-  )
+  optdepends=('python-setuptools: for gr_modtool')
   provides=(
     libgnuradio-analog.so
     libgnuradio-audio.so
@@ -162,7 +193,6 @@ package_gnuradio() {
     libgnuradio-zeromq.so
   )
   backup=(
-    etc/gnuradio/conf.d/00-grc-docs.conf
     etc/gnuradio/conf.d/gnuradio-runtime.conf
     etc/gnuradio/conf.d/gr-audio-alsa.conf
     etc/gnuradio/conf.d/gr-audio-jack.conf
@@ -170,35 +200,90 @@ package_gnuradio() {
     etc/gnuradio/conf.d/gr-audio-portaudio.conf
     etc/gnuradio/conf.d/gr-audio.conf
     etc/gnuradio/conf.d/gr-qtgui.conf
-    etc/gnuradio/conf.d/grc.conf
     etc/gnuradio/conf.d/modtool.conf
   )
 
   cd $pkgbase-$pkgver
   DESTDIR="$pkgdir" cmake --install build
+  install -vDm644 -t "$pkgdir/usr/share/doc/$pkgname" ./*.md
+  rm -r "$pkgdir/usr/share/gnuradio/modtool/templates/gr-newmod/docs"
 
-  install -vDm644 -t "$pkgdir/usr/lib/udev/rules.d/" "$srcdir/21-fcd.rules"
+  cd "$pkgdir"
+  local site_packages=$(python -c "import site; print(site.getsitepackages()[0][1:])")
+  _pick "$srcdir/gnuradio-companion" \
+    "$site_packages/gnuradio/grc" \
+    etc/gnuradio/conf.d/00-grc-docs.conf \
+    etc/gnuradio/conf.d/grc.conf \
+    usr/bin/gnuradio-companion \
+    usr/bin/grcc \
+    usr/share/gnuradio/grc \
+    usr/share/man/man1/gnuradio-companion.1 \
+    usr/share/man/man1/grcc.1
+  _pick "$srcdir/gnuradio-docs" usr/share/doc
+  _pick "$srcdir/gnuradio-examples" usr/share/gnuradio/examples
+}
 
-  install -vDm644 -t "$pkgdir/usr/share/applications" grc/scripts/freedesktop/gnuradio-grc.desktop
-  install -vDm644 -t "$pkgdir/usr/share/mime/packages" grc/scripts/freedesktop/gnuradio-grc.xml
-  install -vDm644 -t "$pkgdir/usr/share/metainfo" grc/scripts/freedesktop/org.gnuradio.grc.metainfo.xml
+package_gnuradio-companion() {
+  pkgdesc+=" (GUI)"
+  depends=(
+    glib2
+    gnuradio
+    gobject-introspection-runtime
+    gtk3
+    pango
+    python
+    python-cairo
+    python-gobject
+    python-lxml
+    python-mako
+    python-numpy
+    python-qtpy
+    python-yaml
+  )
+  backup=(
+    etc/gnuradio/conf.d/00-grc-docs.conf
+    etc/gnuradio/conf.d/grc.conf
+  )
+
+  cp -va -t "$pkgdir" "$pkgname/"*
+
+  cd $pkgbase-$pkgver
+  install -vDm644 -t "$pkgdir/usr/share/applications" \
+    grc/scripts/freedesktop/gnuradio-grc.desktop
+  install -vDm644 -t "$pkgdir/usr/share/mime/packages" \
+    grc/scripts/freedesktop/gnuradio-grc.xml
+  install -vDm644 -t "$pkgdir/usr/share/metainfo" \
+    grc/scripts/freedesktop/org.gnuradio.grc.metainfo.xml
   for size in 16 24 32 48 64 128 256; do
     install -vDm644 "grc/scripts/freedesktop/grc-icon-$size.png" \
       "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/gnuradio-grc.png"
   done
+  install -vDm644 -t "$pkgdir/usr/lib/udev/rules.d" "$srcdir/21-fcd.rules"
 }
 
-package_gnuradio-companion() {
-  pkgdesc="GUI frontend for gnuradio and SDR"
+package_gnuradio-docs() {
+  pkgdesc+=" (documentation)"
+
+  cp -va -t "$pkgdir" "$pkgname/"*
+}
+
+package_gnuradio-examples() {
+  pkgdesc+=" (examples)"
   depends=(
+    boost-libs
+    fmt
+    gcc-libs
+    glibc
     gnuradio
-    python-cairo
-    python-gobject
-    python-lxml
-    python-opengl
+    libuhd
+    python
+    python-matplotlib
+    python-numpy
     python-pyqt5
-    python-pyqtgraph
+    python-scipy
     qt5-base
-    qwt
+    spdlog
   )
+
+  cp -va -t "$pkgdir" "$pkgname/"*
 }
