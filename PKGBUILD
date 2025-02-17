@@ -14,7 +14,7 @@ pkgname=(
   python-gnuradio
 )
 pkgver=3.10.11.0
-pkgrel=12
+pkgrel=13
 pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
