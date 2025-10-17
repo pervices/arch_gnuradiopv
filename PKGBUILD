@@ -14,7 +14,7 @@ pkgname=(
   python-gnuradio
 )
 pkgver=3.10.12.0
-pkgrel=8
+pkgrel=9
 pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -76,12 +76,14 @@ checkdepends=(
 )
 _url=https://github.com/gnuradio/gnuradio
 source=(
-  "$pkgbase-$pkgver.tar.gz::$_url/archive/v$pkgver/$pkgbase-v$pkgver.tar.gz"
+  "$_url/archive/v$pkgver/$pkgbase-v$pkgver.tar.gz"
   "$_url/releases/download/v$pkgver/$pkgbase-$pkgver.tar.gz.asc"
+  "$_url/commit/a166bdf73d3e3bfd362c239bbd58852faaad39c4.patch"
   "21-fcd.rules"
 )
 sha256sums=('fe78ad9f74c8ebf93d5c8ad6fa2c13236af330f3c67149d91a0647b3dc6f3958'
             'SKIP'
+            'fa15d522c024d5a8f97d7e5680b07b3b3a1919cd98914b77c7773606853bf468'
             '928f4e4b5d8d9fab634e119b83ba9db9fb3501b4d5527cceb7bfa595818be81a')
 validpgpkeys=(
   'B90DDFAC56989BF62262EB812987C77CBB8ED9B2' # GNU Radio Project (Admin) <admin@gnuradio.org>
@@ -97,6 +99,9 @@ prepare() {
   # Strip build path from docs
   sed -i 's/^STRIP_FROM_PATH.*/STRIP_FROM_PATH = @PROJECT_SOURCE_DIR@ @PROJECT_BINARY_DIR@/' \
     docs/doxygen/Doxyfile.in
+
+  # Boost 1.89 compatibility
+  patch -Np1 < ../a166bdf73d3e3bfd362c239bbd58852faaad39c4.patch
 }
 
 build() {
