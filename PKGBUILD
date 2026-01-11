@@ -14,7 +14,7 @@ pkgname=(
   python-gnuradio
 )
 pkgver=3.10.12.0
-pkgrel=11
+pkgrel=12
 pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -76,7 +76,7 @@ checkdepends=(
 )
 _url=https://github.com/gnuradio/gnuradio
 source=(
-  "$_url/archive/v$pkgver/$pkgbase-v$pkgver.tar.gz"
+  "$_url/archive/v$pkgver/$pkgbase-$pkgver.tar.gz"
   "$_url/releases/download/v$pkgver/$pkgbase-$pkgver.tar.gz.asc"
   "$_url/commit/a166bdf73d3e3bfd362c239bbd58852faaad39c4.patch"
   "21-fcd.rules"
