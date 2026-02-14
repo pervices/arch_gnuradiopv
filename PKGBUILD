@@ -14,7 +14,7 @@ pkgname=(
   python-gnuradio
 )
 pkgver=3.10.12.0
-pkgrel=12
+pkgrel=13
 pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -29,15 +29,16 @@ makedepends=(
   doxygen
   fftw
   fmt
-  gcc-libs
   glibc
   gmp
   gsl
   gtk3
   jack
   libad9361
+  libgcc
   libiio
   libsndfile
+  libstdc++
   libuhd
   libunwind
   libvolk
@@ -136,14 +137,15 @@ package_gnuradio() {
     codec2
     fftw
     fmt
-    gcc-libs
     glibc
     gmp
     gsl
     jack
     libad9361
+    libgcc
     libiio
     libsndfile
+    libstdc++
     libuhd
     libunwind
     libvolk
@@ -280,9 +282,10 @@ package_gnuradio-examples() {
   depends=(
     boost-libs
     fmt
-    gcc-libs
     glibc
     gnuradio
+    libgcc
+    libstdc++
     libuhd
     python
     python-gnuradio
@@ -315,10 +318,11 @@ package_python-gnuradio() {
   pkgdesc+=" (Python module)"
   depends=(
     fmt
-    gcc-libs
     glibc
     gmp
     gnuradio
+    libgcc
+    libstdc++
     libuhd
     libvolk
     python
