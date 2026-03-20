@@ -14,7 +14,7 @@ pkgname=(
   python-gnuradio
 )
 pkgver=3.10.12.0
-pkgrel=13
+pkgrel=14
 pkgdesc="Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -62,7 +62,7 @@ makedepends=(
   python-scipy
   python-thrift
   qt5-base
-  qwt
+  qwt-qt5
   sdl12-compat
   soapysdr
   spdlog
@@ -154,7 +154,7 @@ package_gnuradio() {
     python-matplotlib
     python-numpy
     qt5-base
-    qwt
+    qwt-qt5
     sdl12-compat
     soapysdr
     spdlog
