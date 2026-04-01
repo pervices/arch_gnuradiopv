@@ -40,7 +40,7 @@ makedepends=(
   libiio
   libsndfile
   libstdc++
-  libuhd
+  libuhdpv
   libunwind
   libvolk
   mathjax2
@@ -147,7 +147,7 @@ package_gnuradio() {
     libiio
     libsndfile
     libstdc++
-    libuhd
+    libuhdpv
     libunwind
     libvolk
     portaudio
@@ -287,7 +287,7 @@ package_gnuradio-examples() {
     gnuradio
     libgcc
     libstdc++
-    libuhd
+    libuhdpv
     python
     python-gnuradio
     python-matplotlib
@@ -324,7 +324,7 @@ package_python-gnuradio() {
     gnuradio
     libgcc
     libstdc++
-    libuhd
+    libuhdpv
     libvolk
     python
     python-click
