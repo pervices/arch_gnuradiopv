@@ -1,4 +1,5 @@
-# Maintainer: Carl Smedstad <carsme@archlinux.org>
+# Maintainer: Per Vices <packages@pervices.com>
+# Contributor: Carl Smedstad <carsme@archlinux.org>
 # Contributor: Kyle Keen <keenerd@gmail.com>
 # Contributor: David Runge <dvzrv@archlinux.org>
 # Contributor: Dominik Heidler <dheidler@gmail.com>
