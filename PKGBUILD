@@ -19,6 +19,9 @@ pkgrel=15
 pkgdesc="Per Vices Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
+# _gitname is used to fetch upstream files with correct name "gnuradio" instead of "gnuradiopv" which we've renamed our package to
+# Upstream references these files as $pkgbase-$pkgver but our pkgbase is different so use _gitname variable anywhere upstream files are referenced
+_gitname=gnuradio
 license=(GPL-3.0-or-later)
 makedepends=(
   alsa-lib
@@ -78,10 +81,10 @@ checkdepends=(
 )
 _url=https://github.com/gnuradio/gnuradio
 # Using <package name>pv::<file_uri> syntax since our package has been renamed to gnuradiopv but we are still getting
-# the upstream gnuradio source, so this renames them to match our package name
+# the upstream gnuradio source, so this renames them to match our package name and minimize use of _gitname elsewhere
 source=(
-  "${pkgbase}pv-$pkgver.tar.gz::$_url/archive/v$pkgver/$pkgbase-$pkgver.tar.gz"
-  "${pkgbase}pv-$pkgver.tar.gz.asc::$_url/releases/download/v$pkgver/$pkgbase-$pkgver.tar.gz.asc"
+  "${pkgbase}pv-$pkgver.tar.gz::$_url/archive/v$pkgver/$_gitname-$pkgver.tar.gz"
+  "${pkgbase}pv-$pkgver.tar.gz.asc::$_url/releases/download/v$pkgver/$_gitname-$pkgver.tar.gz.asc"
   "$_url/commit/a166bdf73d3e3bfd362c239bbd58852faaad39c4.patch"
   "21-fcd.rules"
 )
