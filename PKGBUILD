@@ -5,18 +5,18 @@
 # Contributor: Dominik Heidler <dheidler@gmail.com>
 # Contributor: Jonatan Sastre <jsastreh [ at ] hotmail.com>
 
-pkgbase=gnuradio
+pkgbase=gnuradiopv
 pkgname=(
-  gnuradio
-  gnuradio-companion
-  gnuradio-docs
-  gnuradio-examples
-  gnuradio-utils
-  python-gnuradio
+  gnuradiopv
+  gnuradiopv-companion
+  gnuradiopv-docs
+  gnuradiopv-examples
+  gnuradiopv-utils
+  python-gnuradiopv
 )
 pkgver=3.10.12.0
 pkgrel=15
-pkgdesc="Signal processing runtime and signal processing software development toolkit"
+pkgdesc="Per Vices Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
 license=(GPL-3.0-or-later)
@@ -131,7 +131,7 @@ _pick() {
   done
 }
 
-package_gnuradio() {
+package_gnuradiopv() {
   depends=(
     alsa-lib
     boost-libs
@@ -234,7 +234,7 @@ package_gnuradio() {
   _pick "$srcdir/python-gnuradio" "usr/lib/python$python_version"
 }
 
-package_gnuradio-companion() {
+package_gnuradiopv-companion() {
   pkgdesc+=" (GUI)"
   depends=(
     glib2
@@ -243,7 +243,7 @@ package_gnuradio-companion() {
     pango
     python
     python-cairo
-    python-gnuradio
+    python-gnuradiopv
     python-gobject
     python-lxml
     python-mako
@@ -272,24 +272,24 @@ package_gnuradio-companion() {
   install -vDm644 -t "$pkgdir/usr/lib/udev/rules.d" "$srcdir/21-fcd.rules"
 }
 
-package_gnuradio-docs() {
+package_gnuradiopv-docs() {
   pkgdesc+=" (documentation)"
 
   cp -va -t "$pkgdir" "$pkgname/"*
 }
 
-package_gnuradio-examples() {
+package_gnuradiopv-examples() {
   pkgdesc+=" (examples)"
   depends=(
     boost-libs
     fmt
     glibc
-    gnuradio
+    gnuradiopv
     libgcc
     libstdc++
     libuhdpv
     python
-    python-gnuradio
+    python-gnuradiopv
     python-matplotlib
     python-numpy
     python-pyqt5
@@ -301,11 +301,11 @@ package_gnuradio-examples() {
   cp -va -t "$pkgdir" "$pkgname/"*
 }
 
-package_gnuradio-utils() {
+package_gnuradiopv-utils() {
   pkgdesc+=" (utilities)"
   depends=(
     python
-    python-gnuradio
+    python-gnuradiopv
     python-matplotlib
     python-numpy
     python-pyqt5
@@ -315,13 +315,13 @@ package_gnuradio-utils() {
   cp -va -t "$pkgdir" "$pkgname/"*
 }
 
-package_python-gnuradio() {
+package_python-gnuradiopv() {
   pkgdesc+=" (Python module)"
   depends=(
     fmt
     glibc
     gmp
-    gnuradio
+    gnuradiopv
     libgcc
     libstdc++
     libuhdpv
