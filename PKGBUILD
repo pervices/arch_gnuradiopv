@@ -80,8 +80,6 @@ checkdepends=(
   xorg-server-xvfb
 )
 _url=https://github.com/gnuradio/gnuradio
-# Using <package name>pv::<file_uri> syntax since our package has been renamed to gnuradiopv but we are still getting
-# the upstream gnuradio source, so this renames them to match our package name and minimize use of _gitname elsewhere
 source=(
   "$_url/archive/v$pkgver/$_gitname-$pkgver.tar.gz"
   "$_url/releases/download/v$pkgver/$_gitname-$pkgver.tar.gz.asc"
@@ -99,7 +97,7 @@ validpgpkeys=(
 )
 
 prepare() {
-  cd $pkgbase-$pkgver
+  cd $_gitname-$pkgver
   # shellcheck disable=SC2016
   sed -i 's/-${DOCVER}//' CMakeLists.txt
 
@@ -112,7 +110,7 @@ prepare() {
 }
 
 build() {
-  cd $pkgbase-$pkgver
+  cd $_gitname-$pkgver
   cmake \
     -S . -B build \
     -D CMAKE_INSTALL_PREFIX=/usr \
@@ -123,7 +121,7 @@ build() {
 }
 
 check() {
-  cd $pkgbase-$pkgver
+  cd $_gitname-$pkgver
   xvfb-run ctest --test-dir build --output-on-failure
 }
 
@@ -202,7 +200,7 @@ package_gnuradiopv() {
     etc/gnuradio/conf.d/modtool.conf
   )
 
-  cd $pkgbase-$pkgver
+  cd $_gitname-$pkgver
   DESTDIR="$pkgdir" cmake --install build
   install -vDm644 -t "$pkgdir/usr/share/doc/$pkgname" ./*.md
 
@@ -263,7 +261,7 @@ package_gnuradiopv-companion() {
 
   cp -va -t "$pkgdir" "$pkgname/"*
 
-  cd $pkgbase-$pkgver
+  cd $_gitname-$pkgver
   install -vDm644 -t "$pkgdir/usr/share/applications" \
     grc/scripts/freedesktop/gnuradio-grc.desktop
   install -vDm644 -t "$pkgdir/usr/share/mime/packages" \
