@@ -83,8 +83,8 @@ _url=https://github.com/gnuradio/gnuradio
 # Using <package name>pv::<file_uri> syntax since our package has been renamed to gnuradiopv but we are still getting
 # the upstream gnuradio source, so this renames them to match our package name and minimize use of _gitname elsewhere
 source=(
-  "${pkgbase}-$pkgver.tar.gz::$_url/archive/v$pkgver/$_gitname-$pkgver.tar.gz"
-  "${pkgbase}-$pkgver.tar.gz.asc::$_url/releases/download/v$pkgver/$_gitname-$pkgver.tar.gz.asc"
+  "$_url/archive/v$pkgver/$_gitname-$pkgver.tar.gz"
+  "$_url/releases/download/v$pkgver/$_gitname-$pkgver.tar.gz.asc"
   "$_url/commit/a166bdf73d3e3bfd362c239bbd58852faaad39c4.patch"
   "21-fcd.rules"
 )
