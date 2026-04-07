@@ -302,6 +302,10 @@ package_gnuradiopv-docs() {
   # To keep the paths the same, references to pkgname are replaced with upstream_pkgname
   # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream
   local upstream_pkgname="gnuradio-docs"
+  # Specify this is an alternative and conflicts with the upstream package.
+  # If updated to allow installation alongside upstream, remove both provides and conflicts arrays since the $pkgname is automatically included in provides
+  provides+=($upstream_pkgname)
+  conflicts=($upstream_pkgname)
 
   cp -va -t "$pkgdir" "$upstream_pkgname/"*
 }
