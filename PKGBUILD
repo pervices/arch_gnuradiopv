@@ -200,12 +200,19 @@ package_gnuradiopv() {
     etc/gnuradio/conf.d/modtool.conf
   )
 
+  # We've renamed the package to gnuradiopv but otherwise keep it the same as upstream including the file paths
+  # To keep the paths the same, references to pkgname are replaced with upstream_pkgname
+  # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream
+  local upstream_pkgname = "gnuradio"
+
   cd $_gitname-$pkgver
   DESTDIR="$pkgdir" cmake --install build
-  install -vDm644 -t "$pkgdir/usr/share/doc/$pkgname" ./*.md
+  install -vDm644 -t "$pkgdir/usr/share/doc/$upstream_pkgname" ./*.md
 
   cd "$pkgdir"
   local python_version=$(python -c "import sys; print(sys.version[:4])")
+  # If we wanted to install this alongside upstream gnuradio, we would have to update these paths (ex/ $srcdir/gnuradio-examples -> $srcdir/gnuradiopv-examples)
+  # Since we currently have this as conflicting with upstream though, these can remain as they are
   _pick "$srcdir/gnuradio-companion" \
     "usr/lib/python$python_version/site-packages/gnuradio/grc" \
     etc/gnuradio/conf.d/00-grc-docs.conf \
@@ -259,7 +266,11 @@ package_gnuradiopv-companion() {
     etc/gnuradio/conf.d/grc.conf
   )
 
-  cp -va -t "$pkgdir" "$pkgname/"*
+  # We've renamed the package to gnuradiopv-companion but otherwise keep it the same as upstream including the file paths
+  # To keep the paths the same, references to pkgname are replaced with upstream_pkgname
+  # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream
+  local upstream_pkgname = "gnuradio-companion"
+  cp -va -t "$pkgdir" "$upstream_pkgname/"*
 
   cd $_gitname-$pkgver
   install -vDm644 -t "$pkgdir/usr/share/applications" \
@@ -277,8 +288,12 @@ package_gnuradiopv-companion() {
 
 package_gnuradiopv-docs() {
   pkgdesc+=" (documentation)"
+  # We've renamed the package to gnuradiopv-docs but otherwise keep it the same as upstream including the file paths
+  # To keep the paths the same, references to pkgname are replaced with upstream_pkgname
+  # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream
+  local upstream_pkgname = "gnuradio-docs"
 
-  cp -va -t "$pkgdir" "$pkgname/"*
+  cp -va -t "$pkgdir" "$upstream_pkgname/"*
 }
 
 package_gnuradiopv-examples() {
@@ -301,7 +316,12 @@ package_gnuradiopv-examples() {
     spdlog
   )
 
-  cp -va -t "$pkgdir" "$pkgname/"*
+  # We've renamed the package to gnuradiopv-examples but otherwise keep it the same as upstream including the file paths
+  # To keep the paths the same, references to pkgname are replaced with upstream_pkgname
+  # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream
+  local upstream_pkgname = "gnuradio-examples"
+
+  cp -va -t "$pkgdir" "$upstream_pkgname/"*
 }
 
 package_gnuradiopv-utils() {
@@ -314,8 +334,12 @@ package_gnuradiopv-utils() {
     python-pyqt5
     python-thrift
   )
+  # We've renamed the package to gnuradiopv-utils but otherwise keep it the same as upstream including the file paths
+  # To keep the paths the same, references to pkgname are replaced with upstream_pkgname
+  # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream
+  local upstream_pkgname = "gnuradio-utils"
 
-  cp -va -t "$pkgdir" "$pkgname/"*
+  cp -va -t "$pkgdir" "$upstream_pkgname/"*
 }
 
 package_python-gnuradiopv() {
@@ -346,6 +370,10 @@ package_python-gnuradiopv() {
     soapysdr
     spdlog
   )
+  # We've renamed the package to python-gnuradiopv but otherwise keep it the same as upstream including the file paths
+  # To keep the paths the same, references to pkgname are replaced with upstream_pkgname
+  # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream
+  local upstream_pkgname = "python-gnuradio"
 
-  cp -va -t "$pkgdir" "$pkgname/"*
+  cp -va -t "$pkgdir" "$upstream_pkgname/"*
 }
