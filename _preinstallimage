@@ -1,2 +1,2 @@
 Name: base
-BuildRequires: lapack
+Prefer: lapack
