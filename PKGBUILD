@@ -5,20 +5,26 @@
 # Contributor: Dominik Heidler <dheidler@gmail.com>
 # Contributor: Jonatan Sastre <jsastreh [ at ] hotmail.com>
 
-pkgbase=gnuradio
+pkgbase=gnuradiopv
 pkgname=(
-  gnuradio
-  gnuradio-companion
-  gnuradio-docs
-  gnuradio-examples
-  gnuradio-utils
-  python-gnuradio
+  gnuradiopv
+  gnuradiopv-companion
+  gnuradiopv-docs
+  gnuradiopv-examples
+  gnuradiopv-utils
+  python-gnuradiopv
 )
 pkgver=3.10.12.0
-pkgrel=15
-pkgdesc="Signal processing runtime and signal processing software development toolkit"
+# pkgrel is incremented each time we rebuild the package for the version $pkgver. $pkgver matches the version of upstream gnuradio
+# we are building and is not changed just for packaging updates. If we switch to a new pkgver, pkgrel is reset to 1.
+pkgrel=1
+pkgdesc="Per Vices Signal processing runtime and signal processing software development toolkit"
 arch=(x86_64)
 url="https://gnuradio.org"
+# Since we've only changed the package names but not the directories or URLs to get the sources from, we need to replace
+# references to $pkgbase with $upstream_pkgbase (gnuradio instead of gnuradiopv). If we update our packaging to allow installation alongside
+# upstream, we can switch back to using $pkgbase.
+_upstream_pkgbase=gnuradio
 license=(GPL-3.0-or-later)
 makedepends=(
   alsa-lib
@@ -78,8 +84,8 @@ checkdepends=(
 )
 _url=https://github.com/gnuradio/gnuradio
 source=(
-  "$_url/archive/v$pkgver/$pkgbase-$pkgver.tar.gz"
-  "$_url/releases/download/v$pkgver/$pkgbase-$pkgver.tar.gz.asc"
+  "$_url/archive/v$pkgver/$_upstream_pkgbase-$pkgver.tar.gz"
+  "$_url/releases/download/v$pkgver/$_upstream_pkgbase-$pkgver.tar.gz.asc"
   "$_url/commit/a166bdf73d3e3bfd362c239bbd58852faaad39c4.patch"
   "21-fcd.rules"
 )
@@ -94,7 +100,7 @@ validpgpkeys=(
 )
 
 prepare() {
-  cd $pkgbase-$pkgver
+  cd $_upstream_pkgbase-$pkgver
   # shellcheck disable=SC2016
   sed -i 's/-${DOCVER}//' CMakeLists.txt
 
@@ -107,7 +113,7 @@ prepare() {
 }
 
 build() {
-  cd $pkgbase-$pkgver
+  cd $_upstream_pkgbase-$pkgver
   cmake \
     -S . -B build \
     -D CMAKE_INSTALL_PREFIX=/usr \
@@ -118,7 +124,7 @@ build() {
 }
 
 check() {
-  cd $pkgbase-$pkgver
+  cd $_upstream_pkgbase-$pkgver
   xvfb-run ctest --test-dir build --output-on-failure
 }
 
@@ -131,7 +137,7 @@ _pick() {
   done
 }
 
-package_gnuradio() {
+package_gnuradiopv() {
   depends=(
     alsa-lib
     boost-libs
@@ -196,13 +202,23 @@ package_gnuradio() {
     etc/gnuradio/conf.d/gr-qtgui.conf
     etc/gnuradio/conf.d/modtool.conf
   )
+  # Specify this is an alternative and conflicts with the upstream package.
+  # If updated to allow installation alongside upstream, remove both provides and conflicts arrays since the $pkgname is automatically included in provides
+  provides+=(${pkgname/gnuradiopv/gnuradio})
+  conflicts=(${pkgname/gnuradiopv/gnuradio})
+  # We've renamed the package to gnuradiopv but otherwise keep it the same as upstream including the file paths.
+  # To keep the paths the same, references to pkgname are replaced with upstream_pkgname.
+  # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream.
+  local upstream_pkgname=${pkgname/gnuradiopv/gnuradio}
 
-  cd $pkgbase-$pkgver
+  cd $_upstream_pkgbase-$pkgver
   DESTDIR="$pkgdir" cmake --install build
-  install -vDm644 -t "$pkgdir/usr/share/doc/$pkgname" ./*.md
+  install -vDm644 -t "$pkgdir/usr/share/doc/$upstream_pkgname" ./*.md
 
   cd "$pkgdir"
   local python_version=$(python -c "import sys; print(sys.version[:4])")
+  # If we wanted to install this alongside upstream gnuradio, we would have to update these paths (ex/ $srcdir/gnuradio-examples -> $srcdir/gnuradiopv-examples)
+  # Since we currently have this as conflicting with upstream though, these can remain as they are
   _pick "$srcdir/gnuradio-companion" \
     "usr/lib/python$python_version/site-packages/gnuradio/grc" \
     etc/gnuradio/conf.d/00-grc-docs.conf \
@@ -234,7 +250,7 @@ package_gnuradio() {
   _pick "$srcdir/python-gnuradio" "usr/lib/python$python_version"
 }
 
-package_gnuradio-companion() {
+package_gnuradiopv-companion() {
   pkgdesc+=" (GUI)"
   depends=(
     glib2
@@ -243,7 +259,7 @@ package_gnuradio-companion() {
     pango
     python
     python-cairo
-    python-gnuradio
+    python-gnuradiopv
     python-gobject
     python-lxml
     python-mako
@@ -255,10 +271,17 @@ package_gnuradio-companion() {
     etc/gnuradio/conf.d/00-grc-docs.conf
     etc/gnuradio/conf.d/grc.conf
   )
+  # Specify this is an alternative and conflicts with the upstream package.
+  # If updated to allow installation alongside upstream, remove both provides and conflicts arrays since the $pkgname is automatically included in provides
+  provides+=(${pkgname/gnuradiopv/gnuradio})
+  conflicts=(${pkgname/gnuradiopv/gnuradio})
+  # We've renamed the package to gnuradiopv but otherwise keep it the same as upstream including the file paths.
+  # To keep the paths the same, references to pkgname are replaced with upstream_pkgname.
+  # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream.
+  local upstream_pkgname=${pkgname/gnuradiopv/gnuradio}
+  cp -va -t "$pkgdir" "$upstream_pkgname/"*
 
-  cp -va -t "$pkgdir" "$pkgname/"*
-
-  cd $pkgbase-$pkgver
+  cd $_upstream_pkgbase-$pkgver
   install -vDm644 -t "$pkgdir/usr/share/applications" \
     grc/scripts/freedesktop/gnuradio-grc.desktop
   install -vDm644 -t "$pkgdir/usr/share/mime/packages" \
@@ -272,24 +295,32 @@ package_gnuradio-companion() {
   install -vDm644 -t "$pkgdir/usr/lib/udev/rules.d" "$srcdir/21-fcd.rules"
 }
 
-package_gnuradio-docs() {
+package_gnuradiopv-docs() {
   pkgdesc+=" (documentation)"
+  # Specify this is an alternative and conflicts with the upstream package.
+  # If updated to allow installation alongside upstream, remove both provides and conflicts arrays since the $pkgname is automatically included in provides
+  provides+=(${pkgname/gnuradiopv/gnuradio})
+  conflicts=(${pkgname/gnuradiopv/gnuradio})
+  # We've renamed the package to gnuradiopv but otherwise keep it the same as upstream including the file paths.
+  # To keep the paths the same, references to pkgname are replaced with upstream_pkgname.
+  # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream.
+  local upstream_pkgname=${pkgname/gnuradiopv/gnuradio}
 
-  cp -va -t "$pkgdir" "$pkgname/"*
+  cp -va -t "$pkgdir" "$upstream_pkgname/"*
 }
 
-package_gnuradio-examples() {
+package_gnuradiopv-examples() {
   pkgdesc+=" (examples)"
   depends=(
     boost-libs
     fmt
     glibc
-    gnuradio
+    gnuradiopv
     libgcc
     libstdc++
     libuhdpv
     python
-    python-gnuradio
+    python-gnuradiopv
     python-matplotlib
     python-numpy
     python-pyqt5
@@ -297,31 +328,47 @@ package_gnuradio-examples() {
     qt5-base
     spdlog
   )
+  # Specify this is an alternative and conflicts with the upstream package.
+  # If updated to allow installation alongside upstream, remove both provides and conflicts arrays since the $pkgname is automatically included in provides
+  provides+=(${pkgname/gnuradiopv/gnuradio})
+  conflicts=(${pkgname/gnuradiopv/gnuradio})
+  # We've renamed the package to gnuradiopv but otherwise keep it the same as upstream including the file paths.
+  # To keep the paths the same, references to pkgname are replaced with upstream_pkgname.
+  # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream.
+  local upstream_pkgname=${pkgname/gnuradiopv/gnuradio}
 
-  cp -va -t "$pkgdir" "$pkgname/"*
+  cp -va -t "$pkgdir" "$upstream_pkgname/"*
 }
 
-package_gnuradio-utils() {
+package_gnuradiopv-utils() {
   pkgdesc+=" (utilities)"
   depends=(
     python
-    python-gnuradio
+    python-gnuradiopv
     python-matplotlib
     python-numpy
     python-pyqt5
     python-thrift
   )
+  # Specify this is an alternative and conflicts with the upstream package.
+  # If updated to allow installation alongside upstream, remove both provides and conflicts arrays since the $pkgname is automatically included in provides
+  provides+=(${pkgname/gnuradiopv/gnuradio})
+  conflicts=(${pkgname/gnuradiopv/gnuradio})
+  # We've renamed the package to gnuradiopv but otherwise keep it the same as upstream including the file paths.
+  # To keep the paths the same, references to pkgname are replaced with upstream_pkgname.
+  # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream.
+  local upstream_pkgname=${pkgname/gnuradiopv/gnuradio}
 
-  cp -va -t "$pkgdir" "$pkgname/"*
+  cp -va -t "$pkgdir" "$upstream_pkgname/"*
 }
 
-package_python-gnuradio() {
+package_python-gnuradiopv() {
   pkgdesc+=" (Python module)"
   depends=(
     fmt
     glibc
     gmp
-    gnuradio
+    gnuradiopv
     libgcc
     libstdc++
     libuhdpv
@@ -343,6 +390,14 @@ package_python-gnuradio() {
     soapysdr
     spdlog
   )
+  # Specify this is an alternative and conflicts with the upstream package.
+  # If updated to allow installation alongside upstream, remove both provides and conflicts arrays since the $pkgname is automatically included in provides
+  provides+=(${pkgname/gnuradiopv/gnuradio})
+  conflicts=(${pkgname/gnuradiopv/gnuradio})
+  # We've renamed the package to gnuradiopv but otherwise keep it the same as upstream including the file paths.
+  # To keep the paths the same, references to pkgname are replaced with upstream_pkgname.
+  # If updated to allow installation alongside upstream, this can go back to using pkgname to avoid conflicts with upstream.
+  local upstream_pkgname=${pkgname/gnuradiopv/gnuradio}
 
-  cp -va -t "$pkgdir" "$pkgname/"*
+  cp -va -t "$pkgdir" "$upstream_pkgname/"*
 }
