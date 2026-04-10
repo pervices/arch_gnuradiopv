@@ -8,4 +8,5 @@ jobs:
       - shell: bash
         env:
           OBS_SERVICE_TOKEN: ${{ secrets.OBS_SERVICE_TOKEN }}
-        run: curl -H "Authorization: Token $OBS_SERVICE_TOKEN" -X POST https://api.opensuse.org/trigger/runservice
+        run: |
+          curl -H "Authorization: Token $OBS_SERVICE_TOKEN" -X POST https://api.opensuse.org/trigger/runservice
