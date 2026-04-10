@@ -1,0 +1,20 @@
+# Trigger a service run on the OBS package so it syncs with the github repo.
+name: OBS Service Trigger
+run-name: OBS service run triggered by ${{ github.event_name }}
+# Should only trigger when pushed to main so we can work on development branches without causing reruns.
+on:
+  push:
+    branches:
+      - "main"
+jobs:
+  trigger_service:
+    name: Trigger service run
+    runs-on: ubuntu-latest
+    # We use a token configured in OBS to trigger the service run for a specific package (home:pervices:release)
+    # which is stored as a secret in the github repo.
+    steps:
+      - shell: bash
+        env:
+          OBS_SERVICE_TOKEN: ${{ secrets.OBS_SERVICE_TOKEN }}
+        run: |
+          curl -H "Authorization: Token $OBS_SERVICE_TOKEN" -X POST https://api.opensuse.org/trigger/runservice
