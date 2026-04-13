@@ -18,7 +18,7 @@ pkgver=3.10.12.0
 # pkgrel is incremented each time we rebuild the package for the version $pkgver. $pkgver matches the version of upstream gnuradio
 # we are building and is not changed just for packaging updates. If we switch to a new pkgver, pkgrel is reset to 1.
 pkgrel=1
-pkgdesc="Per Vices Signal processing runtime and signal processing software development toolkit"
+pkgdesc="Signal processing runtime and signal processing software development toolkit compiled to Per Vices SDRs"
 arch=(x86_64)
 url="https://gnuradio.org"
 # Since we've only changed the package names but not the directories or URLs to get the sources from, we need to replace
@@ -168,7 +168,11 @@ package_gnuradiopv() {
     thrift
     zeromq
   )
-  optdepends=('python-setuptools: for gr_modtool')
+  optdepends=(
+    'gnuradiopv-companion: for GUI frontend'
+    'python-gnuradiopv: for Python bindings'
+    'python-setuptools: for gr_modtool'
+  )
   provides=(
     libgnuradio-analog.so
     libgnuradio-audio.so

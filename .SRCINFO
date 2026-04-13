@@ -1,5 +1,5 @@
 pkgbase = gnuradiopv
-	pkgdesc = Per Vices Signal processing runtime and signal processing software development toolkit
+	pkgdesc = Signal processing runtime and signal processing software development toolkit compiled to Per Vices SDRs
 	pkgver = 3.10.12.0
 	pkgrel = 1
 	url = https://gnuradio.org
@@ -98,6 +98,8 @@ pkgname = gnuradiopv
 	depends = spdlog
 	depends = thrift
 	depends = zeromq
+	optdepends = gnuradiopv-companion: for GUI frontend
+	optdepends = python-gnuradiopv: for Python bindings
 	optdepends = python-setuptools: for gr_modtool
 	provides = libgnuradio-analog.so
 	provides = libgnuradio-audio.so
@@ -132,7 +134,7 @@ pkgname = gnuradiopv
 	backup = etc/gnuradio/conf.d/modtool.conf
 
 pkgname = gnuradiopv-companion
-	pkgdesc = Per Vices Signal processing runtime and signal processing software development toolkit (GUI)
+	pkgdesc = Signal processing runtime and signal processing software development toolkit compiled to Per Vices SDRs (GUI)
 	depends = glib2
 	depends = gobject-introspection-runtime
 	depends = gtk3
@@ -152,12 +154,12 @@ pkgname = gnuradiopv-companion
 	backup = etc/gnuradio/conf.d/grc.conf
 
 pkgname = gnuradiopv-docs
-	pkgdesc = Per Vices Signal processing runtime and signal processing software development toolkit (documentation)
+	pkgdesc = Signal processing runtime and signal processing software development toolkit compiled to Per Vices SDRs (documentation)
 	provides = gnuradio-docs
 	conflicts = gnuradio-docs
 
 pkgname = gnuradiopv-examples
-	pkgdesc = Per Vices Signal processing runtime and signal processing software development toolkit (examples)
+	pkgdesc = Signal processing runtime and signal processing software development toolkit compiled to Per Vices SDRs (examples)
 	depends = boost-libs
 	depends = fmt
 	depends = glibc
@@ -177,7 +179,7 @@ pkgname = gnuradiopv-examples
 	conflicts = gnuradio-examples
 
 pkgname = gnuradiopv-utils
-	pkgdesc = Per Vices Signal processing runtime and signal processing software development toolkit (utilities)
+	pkgdesc = Signal processing runtime and signal processing software development toolkit compiled to Per Vices SDRs (utilities)
 	depends = python
 	depends = python-gnuradiopv
 	depends = python-matplotlib
@@ -188,7 +190,7 @@ pkgname = gnuradiopv-utils
 	conflicts = gnuradio-utils
 
 pkgname = python-gnuradiopv
-	pkgdesc = Per Vices Signal processing runtime and signal processing software development toolkit (Python module)
+	pkgdesc = Signal processing runtime and signal processing software development toolkit compiled to Per Vices SDRs (Python module)
 	depends = fmt
 	depends = glibc
 	depends = gmp
