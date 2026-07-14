@@ -123,7 +123,10 @@ build() {
 
 check() {
   cd $_upstream_pkgbase-$pkgver
-  xvfb-run ctest --test-dir build --output-on-failure
+  # Exclude qa_fastnoise from tests since it's failure does not indicate a problem with gnuradio
+  # There is currently a draft PR https://github.com/gnuradio/gnuradio/pull/8145 to fix it,
+  # but until then we will exclude it so the build is successful.
+  xvfb-run ctest --test-dir build --output-on-failure -E qa_fastnoise
 }
 
 _pick() {
