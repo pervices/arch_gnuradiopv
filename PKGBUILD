@@ -15,7 +15,7 @@ pkgname=(
 pkgver=3.10.12.0
 # pkgrel is incremented each time we rebuild the package for the version $pkgver. $pkgver matches the version of upstream gnuradio
 # we are building and is not changed just for packaging updates. If we switch to a new pkgver, pkgrel is reset to 1.
-pkgrel=1
+pkgrel=2
 pkgdesc="Signal processing runtime and signal processing software development toolkit compiled to Per Vices SDRs"
 arch=(x86_64)
 url="https://gnuradio.org"
