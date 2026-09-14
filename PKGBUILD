@@ -15,7 +15,7 @@ pkgname=(
 pkgver=3.10.12.0
 # pkgrel is incremented each time we rebuild the package for the version $pkgver. $pkgver matches the version of upstream gnuradio
 # we are building and is not changed just for packaging updates. If we switch to a new pkgver, pkgrel is reset to 1.
-pkgrel=2
+pkgrel=3
 pkgdesc="Signal processing runtime and signal processing software development toolkit compiled to Per Vices SDRs"
 arch=(x86_64)
 url="https://gnuradio.org"
@@ -47,7 +47,7 @@ makedepends=(
   libuhdpv
   libunwind
   libvolk
-  mathjax2
+  mathjax
   portaudio
   pybind11
   python-cairo
@@ -108,6 +108,11 @@ prepare() {
 
   # Boost 1.89 compatibility
   patch -Np1 < ../a166bdf73d3e3bfd362c239bbd58852faaad39c4.patch
+
+  # Use MathJax 4
+  sed -e 's|MathJax.js|tex-svg.js|' -e 's|PATH_SUFFIXES mathjax2|PATH_SUFFIXES mathjax|' -i cmake/Modules/FindMathJax2.cmake
+  echo "MATHJAX_VERSION = MathJax_4" >> docs/doxygen/Doxyfile.in
+  sed -e 's|^MATHJAX_EXTENSIONS.*|MATHJAX_EXTENSIONS=|' -i docs/doxygen/Doxyfile.in
 }
 
 build() {
