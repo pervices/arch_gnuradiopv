@@ -20,8 +20,8 @@ jobs:
           REL_NUM=$(grep -E "^pkgrel=[0-9]*" PKGBUILD | cut -d = -f2)
           sed -i s/^pkgrel=[0-9]*/pkgrel=$(($REL_NUM + 1))/g PKGBUILD
           # Shouldn't run makepkg as root
-          src_info=$(sudo -E -u docker makepkg --printsrcinfo)
-          echo $src_info > .SRCINFO
+          #src_info=$(sudo -E -u docker makepkg --printsrcinfo)
+          #echo $src_info > .SRCINFO
       - name: Commit and push pkgrel 
         shell: bash
         run: |
