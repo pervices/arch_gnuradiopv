@@ -1,0 +1,27 @@
+# Increment the pkgrel number in PKGBUILD
+name: Increment pkgrel
+run-name: Increment pkgrel triggered by ${{ github.event_name }}
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  increment_pkgrel:
+    name: Increment pkgrel
+    runs-on: ubuntu-latest
+    container: pvtesting/archlinux:base
+    steps:
+      - uses: actions/checkout@v7
+      - name: Update PKGBUILD and .SRCINFO
+      - shell: bash
+        run: |
+          echo "Incrementing package release number in PKGBUILD and .SRCINFO..."
+          REL_NUM=$(grep -E "^pkgrel=[0-9]*" PKGBUILD | cut -d = -f2)
+          sed -i s/^pkgrel=[0-9]*/pkgrel=$(($REL_NUM + 1))/g PKGBUILD
+          makepkg --printsrcinfo > .SRCINFO
+      - name: Commit and push pkgrel update
+        run: |
+          echo "Committing and pushing changes..."
+          git config --global user.name 'pervices'
+          git config --global user.email 'pervices@users.noreply.github.com'
+          git commit -am "Increment pkgrel number for a rebuild"
+          git push
