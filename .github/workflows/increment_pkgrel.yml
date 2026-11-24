@@ -1,7 +1,7 @@
 # Increment the pkgrel number in PKGBUILD
 name: Increment pkgrel
 run-name: Increment pkgrel triggered by ${{ github.event_name }}
-on: workflow_dispatch
+on: [workflow_dispatch, push]
 permissions:
   contents: write
 jobs:
