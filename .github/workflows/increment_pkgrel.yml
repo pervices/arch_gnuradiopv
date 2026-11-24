@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     container: pvtesting/archlinux:base
     steps:
-      - name: Update PKGBUILD and .SRCINFO
+      - name: Checkout repository
         uses: actions/checkout@v7
-        shell: bash
+      - name: Update PKGBUILD and .SRCINFO
         run: |
           echo "Incrementing package release number in PKGBUILD and .SRCINFO..."
           REL_NUM=$(grep -E "^pkgrel=[0-9]*" PKGBUILD | cut -d = -f2)
