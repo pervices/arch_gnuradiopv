@@ -8,10 +8,13 @@ jobs:
   increment_pkgrel:
     name: Increment pkgrel
     runs-on: ubuntu-latest
-    container: pvtesting/archlinux:base
+    container: 
+      image: pvtesting/archlinux:base
+      options: --user docker
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+      - name: Setup 
       - name: Update PKGBUILD and .SRCINFO
         shell: bash
         run: |
