@@ -25,6 +25,8 @@ jobs:
       - name: Commit and push pkgrel 
         shell: bash
         run: |
+          # To fix dubious ownership error, add as safe directory
+          git config --global --add safe.directory .
           echo "Committing and pushing changes..."
           git config --global user.name 'pervices'
           git config --global user.email 'pervices@users.noreply.github.com'
