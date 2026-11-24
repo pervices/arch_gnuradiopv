@@ -13,12 +13,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
       - name: Update PKGBUILD and .SRCINFO
+        shell: bash
         run: |
           echo "Incrementing package release number in PKGBUILD and .SRCINFO..."
           REL_NUM=$(grep -E "^pkgrel=[0-9]*" PKGBUILD | cut -d = -f2)
           sed -i s/^pkgrel=[0-9]*/pkgrel=$(($REL_NUM + 1))/g PKGBUILD
           makepkg --printsrcinfo > .SRCINFO
-      - name: Commit and push pkgrel update
+      - name: Commit and push pkgrel 
+        shell: bash
         run: |
           echo "Committing and pushing changes..."
           git config --global user.name 'pervices'
