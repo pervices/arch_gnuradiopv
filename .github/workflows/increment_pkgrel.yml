@@ -1,0 +1,34 @@
+# Increment the pkgrel number in PKGBUILD
+name: Increment pkgrel
+run-name: Increment pkgrel triggered by ${{ github.event_name }}
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  increment_pkgrel:
+    name: Increment pkgrel
+    runs-on: ubuntu-latest
+    container: 
+      image: pvtesting/archlinux:base
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Update PKGBUILD and .SRCINFO
+        shell: bash
+        run: |
+          echo "Incrementing package release number in PKGBUILD and .SRCINFO..."
+          REL_NUM=$(grep -E "^pkgrel=[0-9]*" PKGBUILD | cut -d = -f2)
+          sed -i s/^pkgrel=[0-9]*/pkgrel=$(($REL_NUM + 1))/g PKGBUILD
+          # Shouldn't run makepkg as root so give docker user permissions for this dir
+          chmod -R a+rw .
+          sudo -E -u docker makepkg --printsrcinfo > .SRCINFO
+      - name: Commit and push pkgrel 
+        shell: bash
+        run: |
+          # To fix dubious ownership error, add as safe directory
+          git config --global --add safe.directory .
+          echo "Committing and pushing changes..."
+          git config --global user.name '${{ github.actor }}'
+          git config --global user.email '${{ github.actor }}@users.noreply.github.com'
+          git commit -am "Increment pkgrel number for a rebuild"
+          git push
