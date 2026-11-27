@@ -9,6 +9,7 @@ on:
       - completed
     branches:
       - "main"
+      - "ops/jtal/chain_run"
   push:
     branches:
       - "main"
@@ -23,4 +24,5 @@ jobs:
         env:
           OBS_SERVICE_TOKEN: ${{ secrets.OBS_SERVICE_TOKEN }}
         run: |
-          curl -H "Authorization: Token $OBS_SERVICE_TOKEN" -X POST https://api.opensuse.org/trigger/runservice
+          #curl -H "Authorization: Token $OBS_SERVICE_TOKEN" -X POST https://api.opensuse.org/trigger/runservice
+          echo "Would have triggered"
