@@ -7,9 +7,6 @@ on:
     workflows: [Increment pkgrel]
     types:
       - completed
-    branches:
-      - "main"
-      - "ops/jtal/chain_run"
   push:
     branches:
       - "main"
