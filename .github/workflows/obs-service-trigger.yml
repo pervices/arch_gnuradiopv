@@ -3,6 +3,12 @@ name: OBS Service Trigger
 run-name: OBS service run triggered by ${{ github.event_name }}
 # Should only trigger when pushed to main so we can work on development branches without causing reruns.
 on:
+  workflow_run:
+    workflows: [Increment pkgrel]
+    types:
+      - completed
+    branches:
+      - "main"
   push:
     branches:
       - "main"
